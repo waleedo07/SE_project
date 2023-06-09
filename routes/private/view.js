@@ -12,7 +12,6 @@ const getUser = async function(req) {
     .from('se_project.sessions')
     .where('token', sessionToken)
     .innerJoin('se_project.users', 'se_project.sessions.userid', 'se_project.users.id')
-    .innerJoin('se_project.roles', 'se_project.users.roleid', 'se_project.roles.id')
     .first();
   
   console.log('user =>', user)
@@ -27,7 +26,11 @@ module.exports = function(app) {
   // Register HTTP endpoint to render /users page
   app.get('/dashboard', async function(req, res) {
     const user = await getUser(req);
-    return res.render('dashboard', user);
+    if (user.role === 'admin') {
+      res.render('adminDashboard');
+    } else {
+      res.render('userDashboard');
+    }
   });
 
   // Register HTTP endpoint to render /users page
@@ -44,6 +47,17 @@ module.exports = function(app) {
   });
 
 
-  
+
+app.get('/subscriptions/purchase', async function(req, res) {
+    const user = await getUser(req);
+    
+    return res.render('subscriptions');
+  });
+
+  app.get('/tickets/purchase', async function(req, res) {
+    const user = await getUser(req);
+    
+    return res.render('ticketsPurchase');
+  });
 
 };

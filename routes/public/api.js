@@ -79,10 +79,9 @@ module.exports = function (app) {
       await db("se_project.sessions").insert(session);
       // In the response, set a cookie on the client with the name "session_cookie"
       // and the value as the UUID we generated. We also set the expiration time.
-      return res
-        .cookie("session_token", token, { expires: expiresat })
-        .status(200)
-        .send("login successful");
+      res.cookie("session_token", token, { expires: expiresat });
+      res.redirect("/dashboard");
+      
     } catch (e) {
       console.log(e.message);
       return res.status(400).send("Could not register user");
