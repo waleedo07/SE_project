@@ -1,0 +1,44 @@
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    fetch('/manage/stations')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        const stations = data.stations;
+        const stationsTableBody = document.getElementById('stations-table-body');
+        if (stations && Object.keys(stations).length > 0) {
+          for (const id in stations) {
+            const station = stations[id];
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${station.id}</td>
+              <td>${station.stationname}</td>
+              <td>
+                <button class="btn btn-danger" onclick="deleteStation(${station.id})">Delete</button>
+              </td>
+            `;
+            stationsTableBody.appendChild(row);
+          }
+        } else {
+          const row = document.createElement('tr');
+          row.innerHTML = '<td colspan="3">No stations found</td>';
+          stationsTableBody.appendChild(row);
+        }
+      })
+      .catch(error => console.log(error));
+  });
+
+  function deleteStation(stationId) {
+    if (confirm('Are you sure you want to delete this station?')) {
+      fetch(`/api/v1/station/${stationId}`, {
+        method: 'DELETE'
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.message);
+          location.reload();
+        })
+        .catch(error => console.log(error));
+    }
+  }
+</script>

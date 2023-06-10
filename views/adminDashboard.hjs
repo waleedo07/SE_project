@@ -21,19 +21,22 @@
         <nav class="navbar navbar-inverse" style="padding-left: 130px;">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/dashboard">Home</a></li>
-            <% if (role === 'admin') { %>
-            <li><a href="/stations_example">Station</a></li>
+           
+            <li><a href="/manage/stations">Stations</a></li>
+            <li><a href="/manage/stations/create">Create Station</a></li>
+            <li><a href="/manage/stations/edit/:stationId">Update Station</a></li>
+             <li><a href="/manage/routes">Routes</a></li>
+             <li><a href="/manage/routes/create">Create Route</a></li>
             <li><a href="/users">Users</a></li>
             <li><a href="/users/add">Add Users</a></li>
-            <% } else { %>
-            <!-- User-specific menu items -->
-            <li><a href="/user_dashboard">User Dashboard</a></li>
-            <% } %>
+            
+           
+           
             <li><a href="/">Logout</a></li>
           </ul>
         </nav>
       </div>
-      <p>Welcome <%= firstName %>, you are logged in!</p>
+      <p>Welcome admin, you are logged in!</p>
     </div>
   </body>
 </html>

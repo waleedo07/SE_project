@@ -450,17 +450,6 @@ app.put("/resetPassword", async function (req, res) {
 });
 
 
-//Get Stations
-
-app.get("/stations",async function(req,res) {
-  try {
-    const user = await getUser(req);
-    const stations = await db.select('*').from('se_project.stations');
-    return res.render('stations_example', { ...user, stations });
-  } catch (error) {
-    res.json({message:"Error",error})
-  }
-});
 
 // delete Station
 
@@ -478,16 +467,20 @@ app.delete("/api/v1/station/:id", async function(req,res){
 // create Station
 
 app.post("/api/v1/station", async function(req,res){
+  console.log("entered post request");
   try {
     const newStation = {
       stationname : req.body.stationname,
-      stationType : req.body.stationtype,
-      stationPosition : req.body.stationposition,
-      stationStatus : req.body.stationstatus
+      stationtype : req.body.stationtype,
+      stationposition : req.body.stationposition,
+      stationstatus : req.body.stationstatus
     }
-  const station = await db("se_project.stations")  
+    console.log("inserting");
+  const station = await db("se_project.stations")
   .insert(newStation).returning("*")
+  console.log("inserted");
     res.status(201).json({message:"Added Successfully",station})
+    
   } catch (error) {
     res.json({message:"Error",error})
   }

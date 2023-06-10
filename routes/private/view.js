@@ -26,7 +26,8 @@ module.exports = function(app) {
   // Register HTTP endpoint to render /users page
   app.get('/dashboard', async function(req, res) {
     const user = await getUser(req);
-    if (user.role === 'admin') {
+    
+    if (user.roleid === 2) {
       res.render('adminDashboard');
     } else {
       res.render('userDashboard');
@@ -39,12 +40,6 @@ module.exports = function(app) {
     return res.render('users', { users });
   });
 
-  // Register HTTP endpoint to render /courses page
-  app.get('/stations', async function(req, res) {
-    const user = await getUser(req);
-    const stations = await db.select('*').from('se_project.stations');
-    return res.render('stations_example', { ...user, stations });
-  });
 
   app.get('/subscriptions', async function(req, res) {
     try {
@@ -137,4 +132,56 @@ module.exports = function(app) {
   
   
 
+
+  //admin frontend
+
+  app.get("/manage/stations", async function(req, res) {
+    try {
+      const user = await getUser(req);
+      const stations = await db.select('*').from('se_project.stations');
+      return res.json({  stations });
+    } catch (error) {
+      return res.status(400).json({ message: "Error", error });
+    }
+  });
+  
+
+  app.get("/manage/stations/create",async function(req,res) {
+    try {
+      const user = await getUser(req);
+      return res.render('stationsCreate');
+    } catch (error) {
+      res.json({message:"Error",error})
+    }
+  });
+
+  app.get("/manage/stations/edit/:stationId", async function(req, res) {
+    try {
+      const { stationId } = req.params;
+      const user = await getUser(req);
+      return res.render('updateStation', { stationId }); // Pass the stationId value to the view
+    } catch (error) {
+      res.json({ message: "Error", error });
+    }
+  });
+
+
+  app.get("/manage/routes", async function(req, res) {
+    try {
+      const user = await getUser(req);
+      const routes = await db.select('*').from('se_project.routes');
+      return res.render("routes", { routes });
+    } catch (error) {
+      return res.status(400).json({ message: "Error", error });
+    }
+  });
+  app.get("/manage/routes/create",async function(req,res) {
+    try {
+      const user = await getUser(req);
+      console.log("rendering")
+      return res.render('routeCreate');
+    } catch (error) {
+      res.json({message:"Error",error})
+    }
+  });
 };
