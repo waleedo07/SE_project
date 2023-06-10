@@ -1,0 +1,60 @@
+<!-- prices.hjs -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Prices</title>
+    <link rel="stylesheet" href="/styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script>
+      // Function to handle form submission using Fetch API
+      function getPrices() {
+        event.preventDefault();
+        
+        const originId = document.getElementById('originId').value;
+        const destinationId = document.getElementById('destinationId').value;
+        
+        fetch(`/api/v1/tickets/price/${originId}&${destinationId}`)
+          .then(response => response.json())
+          .then(data => {
+            // Update the price details section
+            const priceDetails = document.getElementById('priceDetails');
+            if (data) {
+              priceDetails.innerHTML = `
+                <h4>Price Details:</h4>
+                <p>Origin ID: ${data.originId}</p>
+                <p>Destination ID: ${data.destinationId}</p>
+                <p>Price: ${data.price}</p>
+              `;
+            } else {
+              priceDetails.innerHTML = '<p>Prices not found</p>';
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            const priceDetails = document.getElementById('priceDetails');
+            priceDetails.innerHTML = '<p>Failed to retrieve prices</p>';
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <div>
+      <h2>Prices</h2>
+      <form onsubmit="getPrices()">
+        <div class="form-group">
+          <label for="originId">Origin ID:</label>
+          <input type="text" class="form-control" id="originId" name="originId" required>
+        </div>
+        <div class="form-group">
+          <label for="destinationId">Destination ID:</label>
+          <input type="text" class="form-control" id="destinationId" name="destinationId" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Get Prices</button>
+      </form>
+    </div>
+
+    <div id="priceDetails"></div>
+  </body>
+</html>

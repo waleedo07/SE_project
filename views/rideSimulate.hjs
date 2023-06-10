@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ride Simulation</title>
+    <link rel="stylesheet" href="/styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div>
+      <h2>Ride Simulation</h2>
+      <form id="ride-simulation-form">
+        <div class="form-group">
+          <label for="origin-input">Origin</label>
+          <input type="text" class="form-control" id="origin-input" required />
+        </div>
+        <div class="form-group">
+          <label for="destination-input">Destination</label>
+          <input type="text" class="form-control" id="destination-input" required />
+        </div>
+        <div class="form-group">
+          <label for="tripdate-input">Trip Date</label>
+          <input type="datetime-local" class="form-control" id="tripdate-input" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Simulate</button>
+      </form>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const rideSimulationForm = document.getElementById("ride-simulation-form");
+
+        rideSimulationForm.addEventListener("submit", function(event) {
+          event.preventDefault();
+
+          const originInput = document.getElementById("origin-input");
+          const destinationInput = document.getElementById("destination-input");
+          const tripDateInput = document.getElementById("tripdate-input");
+
+          const rideData = {
+            origin: originInput.value,
+            destination: destinationInput.value,
+            tripDate: tripDateInput.value
+          };
+
+          fetch("/api/v1/ride/simulate", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(rideData)
+          })
+            .then(response => response.json())
+            .then(data => {
+              alert("Ride simulated successfully. Ride ID: " + data.rideId);
+              rideSimulationForm.reset();
+            })
+            .catch(error => console.log(error));
+        });
+      });
+    </script>
+  </body>
+</html>

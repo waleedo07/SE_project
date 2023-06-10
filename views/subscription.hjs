@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Subscriptions</title>
+</head>
+<body>
+  <h1>Subscriptions</h1>
+  <ul id="subscriptions-list">
+    <!-- Subscriptions will be dynamically added here -->
+  </ul>
+
+  <script>
+    // Fetch the subscriptions data from the server
+    fetch('/subscriptions')
+      .then(response => response.json())
+      .then(subscriptions => {
+        const subscriptionsList = document.getElementById('subscriptions-list');
+
+        // Iterate over the subscriptions and create list items
+        subscriptions.forEach(subscription => {
+          const listItem = document.createElement('li');
+          listItem.textContent = subscription.name;
+          subscriptionsList.appendChild(listItem);
+        });
+      })
+      .catch(error => {
+        console.log('Error fetching subscriptions:', error);
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tickets</title>
+</head>
+<body>
+  <h1>Tickets</h1>
+  <table id="tickets-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>User</th>
+      </tr>
+    </thead>
+    <tbody id="tickets-table-body">
+      <!-- Tickets data will be dynamically added here -->
+    </tbody>
+  </table>
+
+  <script>
+    fetch('/tickets')
+      .then(response => response.json())
+      .then(tickets => {
+        const tableBody = document.getElementById('tickets-table-body');
+        tickets.forEach(ticket => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${ticket.id}</td>
+            <td>${ticket.title}</td>
+            <td>${ticket.username}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.log('Error fetching tickets:', error);
+      });
+  </script>
+</body>
+</html>

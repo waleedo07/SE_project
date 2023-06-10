@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="loginForm" action="/login" method="POST">
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit">Login</button>
+  </form>
+
+  <h1>Register</h1>
+  <button onclick="location.href='/register'">Register</button>
+
+  <h1>Reset Password</h1>
+  <button onclick="location.href='/resetPassword'">Reset Password</button>
+
+  <script>
+    // Add any JavaScript code here for form submission, validation, etc.
+  </script>
+</body>
+</html>
